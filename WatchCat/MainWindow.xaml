@@ -3,10 +3,55 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:WatchCat"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="WatchCat" 
+        FontFamily="Roboto"
+        Foreground="#DDBEBEBE" 
+        Width="630"
+        Height="605"
+        MinWidth="300"
+        MinHeight="400"
+        WindowStartupLocation="CenterScreen"
+        Background="#1e1e1e"
+        Loaded="OnLoaded"
+        MouseLeftButtonDown="DragWindow">
+    
+    <WindowChrome.WindowChrome>
+        <WindowChrome  GlassFrameThickness="1" CaptionHeight="0"/>
+    </WindowChrome.WindowChrome>
+
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border BorderBrush="#DDBEBEBE" BorderThickness="0,0,0,2">
+            <Grid Margin="5">
+                <TextBlock Text="WATCHCAT" FontSize="18" FontWeight="SemiBold" HorizontalAlignment="Left"/>
+            </Grid>
+        </Border>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+
+            <Button Height="30" Width="30" Padding="0" Style="{DynamicResource MaterialDesignFlatButton}" Click="MinimizeApp">
+                <materialDesign:PackIcon Kind="WindowMinimize"/>
+            </Button>
+
+            <Button Height="30"  Width="30" Padding="0"  Style="{DynamicResource MaterialDesignFlatButton}" Click="OnWindowStateChanged">
+                <materialDesign:PackIcon Kind="WindowMaximize"/>
+            </Button>
+
+            <Button Height="30"  Width="30" Padding="0"  Style="{DynamicResource MaterialDesignFlatButton}" Click="CloseApp">
+                <materialDesign:PackIcon Kind="Close"/>
+            </Button>
+
+        </StackPanel>
         
+        <ProgressBar Grid.Row="1" IsIndeterminate="True" Style="{ StaticResource MaterialDesignCircularProgressBar}" Height="30" Width="30"/>
+        
+        <Frame Grid.Row="1" Name="MainFrame" NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>
