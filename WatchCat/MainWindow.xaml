@@ -12,6 +12,7 @@
         Width="630"
         Height="605"
         MinWidth="300"
+        Topmost="True"
         MinHeight="400"
         WindowStartupLocation="CenterScreen"
         Background="#1e1e1e"
@@ -30,12 +31,16 @@
 
         <Border BorderBrush="#DDBEBEBE" BorderThickness="0,0,0,2">
             <Grid Margin="5">
-                <TextBlock Text="WATCHCAT" FontSize="18" FontWeight="SemiBold" HorizontalAlignment="Left"/>
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Cat" Height="20" Width="20"/>
+                    <TextBlock Text="WatchCat" Padding="2,1,0,0" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Left"/>
+                </StackPanel>
+                
             </Grid>
         </Border>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
-
+            
             <Button Height="30" Width="30" Padding="0" Style="{DynamicResource MaterialDesignFlatButton}" Click="MinimizeApp">
                 <materialDesign:PackIcon Kind="WindowMinimize"/>
             </Button>
@@ -49,8 +54,6 @@
             </Button>
 
         </StackPanel>
-        
-        <ProgressBar Grid.Row="1" IsIndeterminate="True" Style="{ StaticResource MaterialDesignCircularProgressBar}" Height="30" Width="30"/>
         
         <Frame Grid.Row="1" Name="MainFrame" NavigationUIVisibility="Hidden"/>
     </Grid>
