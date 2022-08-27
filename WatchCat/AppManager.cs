@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -11,11 +12,14 @@ namespace WatchCat
             using (var httpClient = new System.Net.Http.HttpClient())
             {
                 var response = await httpClient.GetAsync(url);
-                if (!response.IsSuccessStatusCode)
+                while (!response.IsSuccessStatusCode)
                 {
-                    MessageBox.Show("The server, while acting as a gateway or proxy, received an invalid response from the upstream server it accessed in attempting to fulfill the request.", response.StatusCode.ToString(), MessageBoxButton.OK, MessageBoxImage.Information);
-                    return null;
-                };
+                    Items.Instance.Snackbar.MessageQueue.Enqueue("The server, while acting as a gateway or proxy, received an invalid response from the upstream server it accessed in attempting to fulfill the request.",
+                    null, null, null, false, true, TimeSpan.FromMinutes(1));
+                    await Task.Delay(new TimeSpan(0, 1, 0));
+                    response = await httpClient.GetAsync(url);
+                    
+                }
                 return JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result);
             }
         }
