@@ -14,27 +14,27 @@ namespace WatchCat
 {
     public partial class Items : Page
     {
-        private List<string> _relics = new List<string> { "Axi", "Lith", "Meso", "Neo" };
+        private readonly List<string> _relics = new List<string> { "Axi", "Lith", "Meso", "Neo" };
         private dynamic _filteredItems;
         private List<Item> _itemList;
-        public static Items Instance;
 
         public Items()
         {
             InitializeComponent();
-            Instance = this;
         }
-
-        private void ItemSearch_TextChanged(object sender, TextChangedEventArgs e)
+        private void OnSearchBar_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (_itemList == null) return;
             var foundItems = new List<Item>();
+            
             foreach (var item in _itemList)
             {
+                // filter prime parts by name
                 if (!string.IsNullOrEmpty(item.Name) && item.Name.ToLower().Contains(SearchBar.Text.ToLower()))
                 {
                     foundItems.Add(item);
                 }
+                // filter prime parts by relic
                 item.Relics.ForEach(relic =>
                 {
                     if (relic.ToLower().Contains(SearchBar.Text.ToLower()))
@@ -44,6 +44,7 @@ namespace WatchCat
                     }
                 });
             }
+            
             if (!string.IsNullOrEmpty(SearchBar.Text))
             {
                 DataGrid.ItemsSource = foundItems;
@@ -53,14 +54,13 @@ namespace WatchCat
                 DataGrid.ItemsSource = _itemList;
             }
         }
-
         private async void OnLoaded(object sender, System.Windows.RoutedEventArgs e)
         {
             await UpdateItemData();
 
-            _relics.ForEach(async r => await UpdateRelicData(r));
-
             if (_itemList == null) return;
+
+            _relics.ForEach(r => UpdateRelicData(r));
 
             DataGrid.ItemsSource = _itemList;
 
@@ -94,20 +94,6 @@ namespace WatchCat
                 }
             }
         }
-        private async Task UpdateRelicData(string relic)
-        {
-            if (_filteredItems == null) return;
-            foreach (dynamic relicName in _filteredItems.relics[relic])
-            {
-                foreach (var item in relicName.First)
-                {
-                    string itemName = item.Value;
-                    Item _item = _itemList.FirstOrDefault(x => x.Name == itemName);
-                    if (_item == null) continue;
-                    _item.Relics.Add(relic + " " + relicName.Name);
-                }
-            }
-        }
         private async Task UpdatePrices()
         {
             dynamic prices = await AppManager.HttpRequest("https://api.warframestat.us/wfinfo/prices");
@@ -120,6 +106,20 @@ namespace WatchCat
                 if (_item == null) continue;
                 _item.Average = item.custom_avg;
                 _item.Volume = item.today_vol;
+            }
+        }
+        private void UpdateRelicData(string relic)
+        {
+            if (_filteredItems == null) return;
+            foreach (dynamic relicName in _filteredItems.relics[relic])
+            {
+                foreach (var item in relicName.First)
+                {
+                    string itemName = item.Value;
+                    Item _item = _itemList.FirstOrDefault(x => x.Name == itemName);
+                    if (_item == null) continue;
+                    _item.Relics.Add(relic + " " + relicName.Name);
+                }
             }
         }
         private void OnRowDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
