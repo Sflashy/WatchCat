@@ -3,14 +3,16 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:local="clr-namespace:WatchCat.Models"
       mc:Ignorable="d"
       FontFamily="Roboto"
       Loaded="OnLoaded"
       d:DesignHeight="450" d:DesignWidth="800"
       Background="#1e1e1e"
       Title="ItemPage">
-
+    <Page.DataContext>
+        <local:Item/>
+    </Page.DataContext>
     <Grid>
         <materialDesign:Transitioner SelectedIndex="0" AutoApplyTransitionOrigins="True">
             <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect FadeIn}">
@@ -23,8 +25,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <TextBox Name="ItemSearch" Padding="3" Height="40" materialDesign:HintAssist.Hint="search item (gara prime e.g)" TextChanged="ItemSearch_TextChanged" FontSize="15" Foreground="#FFBEBEBE" VerticalContentAlignment="Center" />
-
+                    <TextBox Name="SearchBar" Padding="3" Height="40" materialDesign:HintAssist.Hint="search item (gara prime e.g)" TextChanged="ItemSearch_TextChanged" FontSize="15" Foreground="#FFBEBEBE" VerticalContentAlignment="Center"/>
                     <DataGrid x:Name="DataGrid" Grid.Row="1" HorizontalGridLinesBrush="#DDBEBEBE" FontSize="15" Background="Transparent" IsReadOnly="True" Foreground="#FFBEBEBE" MouseDoubleClick="OnRowDoubleClick">
                         <DataGrid.ColumnHeaderStyle>
                             <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
@@ -36,6 +37,9 @@
                                 <Style.Triggers>
                                     <Trigger Property="IsSelected" Value="True">
                                         <Setter Property="BorderThickness" Value="0"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="ToolTip" Value="{Binding Relics}"/>
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>

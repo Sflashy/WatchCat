@@ -14,6 +14,7 @@ namespace WatchCat
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             MainFrame.Source = new Uri("Items.xaml", UriKind.RelativeOrAbsolute);
+            UpdateManager.CheckForUpdates();
         }
 
         private void MinimizeApp(object sender, RoutedEventArgs e)
@@ -32,7 +33,14 @@ namespace WatchCat
         }
         private void DragWindow(object sender, MouseButtonEventArgs e)
         {
-            DragMove();
+            try
+            {
+                DragMove();
+            }
+            catch (Exception)
+            {
+                //
+            }
         }
     }
 }

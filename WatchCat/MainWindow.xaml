@@ -12,7 +12,6 @@
         Width="630"
         Height="605"
         MinWidth="300"
-        Topmost="True"
         MinHeight="400"
         WindowStartupLocation="CenterScreen"
         Background="#1e1e1e"
@@ -32,15 +31,14 @@
         <Border BorderBrush="#DDBEBEBE" BorderThickness="0,0,0,2">
             <Grid Margin="5">
                 <StackPanel Orientation="Horizontal">
-                    <materialDesign:PackIcon Kind="Cat" Height="20" Width="20"/>
-                    <TextBlock Text="WatchCat" Padding="2,1,0,0" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Left"/>
+                    <Image Source="Resources/watchcat_gray.png" Height="18" Width="20" RenderOptions.BitmapScalingMode="HighQuality"/>
+                    <TextBlock Text="WatchCat" Padding="5,1,0,0" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                 </StackPanel>
                 
             </Grid>
         </Border>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
-            
             <Button Height="30" Width="30" Padding="0" Style="{DynamicResource MaterialDesignFlatButton}" Click="MinimizeApp">
                 <materialDesign:PackIcon Kind="WindowMinimize"/>
             </Button>
@@ -54,7 +52,6 @@
             </Button>
 
         </StackPanel>
-        
         <Frame Grid.Row="1" Name="MainFrame" NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -13,6 +14,8 @@ namespace WatchCat
 {
     public partial class Items : Page
     {
+        private List<string> _relics = new List<string> { "Axi", "Lith", "Meso", "Neo" };
+        private dynamic _filteredItems;
         private List<Item> _itemList;
         public static Items Instance;
 
@@ -28,12 +31,20 @@ namespace WatchCat
             var foundItems = new List<Item>();
             foreach (var item in _itemList)
             {
-                if (!string.IsNullOrEmpty(item.Name) && item.Name.ToLower().Contains(ItemSearch.Text.ToLower()))
+                if (!string.IsNullOrEmpty(item.Name) && item.Name.ToLower().Contains(SearchBar.Text.ToLower()))
                 {
                     foundItems.Add(item);
                 }
+                item.Relics.ForEach(relic =>
+                {
+                    if (relic.ToLower().Contains(SearchBar.Text.ToLower()))
+                    {
+                        if (foundItems.Contains(item)) return;
+                        foundItems.Add(item);
+                    }
+                });
             }
-            if (!string.IsNullOrEmpty(ItemSearch.Text))
+            if (!string.IsNullOrEmpty(SearchBar.Text))
             {
                 DataGrid.ItemsSource = foundItems;
             }
@@ -45,7 +56,10 @@ namespace WatchCat
 
         private async void OnLoaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            await LoadItems();
+            await UpdateItemData();
+
+            _relics.ForEach(async r => await UpdateRelicData(r));
+
             if (_itemList == null) return;
 
             DataGrid.ItemsSource = _itemList;
@@ -56,13 +70,12 @@ namespace WatchCat
                 await Task.Delay(new TimeSpan(0, 5, 0));
             }
         }
-
-        private async Task LoadItems()
+        private async Task UpdateItemData()
         {
-            dynamic items = await AppManager.HttpRequest("https://api.warframestat.us/wfinfo/filtered_items");
-            if (items == null) return;
+            _filteredItems = await AppManager.HttpRequest("https://api.warframestat.us/wfinfo/filtered_items");
+            if (_filteredItems == null) return;
             _itemList = new List<Item>();
-            foreach (dynamic item in items.eqmt)
+            foreach (dynamic item in _filteredItems.eqmt)
             {
                 foreach (dynamic part in item.Value.parts)
                 {
@@ -81,7 +94,20 @@ namespace WatchCat
                 }
             }
         }
-
+        private async Task UpdateRelicData(string relic)
+        {
+            if (_filteredItems == null) return;
+            foreach (dynamic relicName in _filteredItems.relics[relic])
+            {
+                foreach (var item in relicName.First)
+                {
+                    string itemName = item.Value;
+                    Item _item = _itemList.FirstOrDefault(x => x.Name == itemName);
+                    if (_item == null) continue;
+                    _item.Relics.Add(relic + " " + relicName.Name);
+                }
+            }
+        }
         private async Task UpdatePrices()
         {
             dynamic prices = await AppManager.HttpRequest("https://api.warframestat.us/wfinfo/prices");
@@ -92,11 +118,10 @@ namespace WatchCat
                 if (Regex.Match(itemName, @"Chassis|System|Neuroptics|Wings").Success) itemName = itemName.Replace(" Blueprint", "");
                 Item _item = _itemList.FirstOrDefault(x => x.Name == itemName);
                 if (_item == null) continue;
-                _item.Avarage = item.custom_avg;
+                _item.Average = item.custom_avg;
                 _item.Volume = item.today_vol;
             }
         }
-
         private void OnRowDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             IInputElement element = e.MouseDevice.DirectlyOver;
@@ -116,7 +141,6 @@ namespace WatchCat
                 }
             }
         }
-
         private void OpenInBrowser(string url)
         {
             Process.Start(url);

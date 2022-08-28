@@ -1,11 +1,12 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace WatchCat.Models
 {
     public class Item : INotifyPropertyChanged
     {
-        private double _avarage;
+        private double _average;
         private int _volume;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -15,14 +16,14 @@ namespace WatchCat.Models
         }
 
         public string Name { get; set; }
-        public double Avarage 
+        public double Average 
         { 
-            get { return _avarage; }
+            get { return _average; }
             set 
             { 
-                if(value != _avarage)
+                if(value != _average)
                 {
-                    _avarage = value;
+                    _average = value;
                     NotifyPropertyChanged();
                 }
             } 
@@ -42,5 +43,6 @@ namespace WatchCat.Models
             } 
         }
         public string WFMUrl;
+        public List<string> Relics = new List<string>();
     }
 }
