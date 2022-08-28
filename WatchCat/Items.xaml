@@ -25,7 +25,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <TextBox Name="SearchBar" Padding="3" Height="40" materialDesign:HintAssist.Hint="search item (gara prime e.g)" TextChanged="ItemSearch_TextChanged" FontSize="15" Foreground="#FFBEBEBE" VerticalContentAlignment="Center"/>
+                    <TextBox Name="SearchBar" Padding="3" Height="40" materialDesign:HintAssist.Hint="search item (gara prime e.g)" TextChanged="OnSearchBar_TextChanged" FontSize="15" Foreground="#FFBEBEBE" VerticalContentAlignment="Center"/>
                     <DataGrid x:Name="DataGrid" Grid.Row="1" HorizontalGridLinesBrush="#DDBEBEBE" FontSize="15" Background="Transparent" IsReadOnly="True" Foreground="#FFBEBEBE" MouseDoubleClick="OnRowDoubleClick">
                         <DataGrid.ColumnHeaderStyle>
                             <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
@@ -38,9 +38,6 @@
                                     <Trigger Property="IsSelected" Value="True">
                                         <Setter Property="BorderThickness" Value="0"/>
                                     </Trigger>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="ToolTip" Value="{Binding Relics}"/>
-                                    </Trigger>
                                 </Style.Triggers>
                             </Style>
                         </DataGrid.CellStyle>
@@ -48,6 +45,5 @@
                 </Grid>
             </materialDesign:TransitionerSlide>
         </materialDesign:Transitioner>
-        <materialDesign:Snackbar Background="#2e2e2e" Foreground="#DDBEBEBE" Name="Snackbar" MessageQueue="{materialDesign:MessageQueue}"/>
     </Grid>
 </Page>
