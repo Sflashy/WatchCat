@@ -1,18 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Net.Http;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using WatchCat.Properties;
 
 namespace WatchCat
 {
     public static class UpdateManager
     {
-        public static void CheckForUpdates()
+        public static async void CheckForUpdates()
         {
-            //will be implemented
+            using (var httpClient = new HttpClient())
+            {
+                string latestVersion = await httpClient.GetStringAsync("https://raw.githubusercontent.com/Sflashy/WatchCat/master/WatchCat/version.txt?token=GHSAT0AAAAAABYCL6KIXFQ7T5H3S7NIYMYSYYLYR5Q");
+                string currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                if(latestVersion != currentVersion)
+                {
+                    AppManager.ShowNotification($"A new version of WatchCat is available. Please update to version {latestVersion} now.", TimeSpan.FromSeconds(10));
+                }
+            }
         }
     }
 }
