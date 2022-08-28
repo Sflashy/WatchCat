@@ -14,14 +14,19 @@ namespace WatchCat
                 var response = await httpClient.GetAsync(url);
                 while (!response.IsSuccessStatusCode)
                 {
-                    Items.Instance.Snackbar.MessageQueue.Enqueue("The server, while acting as a gateway or proxy, received an invalid response from the upstream server it accessed in attempting to fulfill the request.",
-                    null, null, null, false, true, TimeSpan.FromMinutes(1));
+                    ShowNotification("The server, while acting as a gateway or proxy, received an invalid response from the upstream server it accessed in attempting to fulfill the request.", TimeSpan.FromMinutes(1));
                     await Task.Delay(new TimeSpan(0, 1, 0));
                     response = await httpClient.GetAsync(url);
                     
                 }
                 return JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result);
             }
+        }
+
+        public static void ShowNotification(string message, TimeSpan duration)
+        {
+            MainWindow.Instance.Snackbar.MessageQueue.Enqueue(message,
+            null, null, null, false, true, duration);
         }
     }
 }
