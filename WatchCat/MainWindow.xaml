@@ -31,7 +31,7 @@
         <Border BorderBrush="#DDBEBEBE" BorderThickness="0,0,0,2">
             <Grid Margin="5">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="Resources/watchcat_gray.png" Height="18" Width="20" RenderOptions.BitmapScalingMode="HighQuality"/>
+                    <Image Source="Resources/watchcat_gray.png" Height="18" Width="20" RenderOptions.BitmapScalingMode="HighQuality" MouseLeftButtonDown="TopMostToggle"/>
                     <TextBlock Text="WatchCat" Padding="5,1,0,0" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                 </StackPanel>
                 
@@ -53,5 +53,6 @@
 
         </StackPanel>
         <Frame Grid.Row="1" Name="MainFrame" NavigationUIVisibility="Hidden"/>
+        <materialDesign:Snackbar Grid.Row="1" Background="#2e2e2e" Foreground="#DDBEBEBE" Name="Snackbar" MessageQueue="{materialDesign:MessageQueue}" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
     </Grid>
 </Window>
