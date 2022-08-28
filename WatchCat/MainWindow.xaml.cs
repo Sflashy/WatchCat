@@ -6,9 +6,11 @@ namespace WatchCat
 {
     public partial class MainWindow : Window
     {
+        public static MainWindow Instance;
         public MainWindow()
         {
             InitializeComponent();
+            Instance = this;
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -41,6 +43,11 @@ namespace WatchCat
             {
                 //
             }
+        }
+
+        private void TopMostToggle(object sender, MouseButtonEventArgs e)
+        {
+            Topmost = !Topmost;
         }
     }
 }
