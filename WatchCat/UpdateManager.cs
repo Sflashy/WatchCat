@@ -14,7 +14,7 @@ namespace WatchCat
                 string currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
                 if(latestVersion != currentVersion)
                 {
-                    AppManager.ShowNotification($"A new version of WatchCat is available. Please update to version {latestVersion} now.", TimeSpan.FromSeconds(10));
+                    AppManager.ShowNotification($"A new version of WatchCat is available. Please update to version {latestVersion}", TimeSpan.FromSeconds(10));
                 }
             }
         }
