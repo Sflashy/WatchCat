@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -16,46 +16,17 @@ namespace WatchCat
     {
         private readonly List<string> _relics = new List<string> { "Axi", "Lith", "Meso", "Neo" };
         private dynamic _filteredItems;
+        private bool _cacheLoaded;
         private List<Item> _itemList;
 
         public Items()
         {
             InitializeComponent();
         }
-        private void OnSearchBar_TextChanged(object sender, TextChangedEventArgs e)
+       
+        private async void OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (_itemList == null) return;
-            var foundItems = new List<Item>();
-            
-            foreach (var item in _itemList)
-            {
-                // filter prime parts by name
-                if (!string.IsNullOrEmpty(item.Name) && item.Name.ToLower().Contains(SearchBar.Text.ToLower()))
-                {
-                    foundItems.Add(item);
-                }
-                // filter prime parts by relic
-                item.Relics.ForEach(relic =>
-                {
-                    if (relic.ToLower().Contains(SearchBar.Text.ToLower()))
-                    {
-                        if (foundItems.Contains(item)) return;
-                        foundItems.Add(item);
-                    }
-                });
-            }
-            
-            if (!string.IsNullOrEmpty(SearchBar.Text))
-            {
-                DataGrid.ItemsSource = foundItems;
-            }
-            else
-            {
-                DataGrid.ItemsSource = _itemList;
-            }
-        }
-        private async void OnLoaded(object sender, System.Windows.RoutedEventArgs e)
-        {
+            AppManager.OnConnectionFailed += OnConnectionFailed;
             await UpdateItemData();
 
             if (_itemList == null) return;
@@ -67,7 +38,7 @@ namespace WatchCat
             while (true)
             {
                 await UpdatePrices();
-                await Task.Delay(new TimeSpan(0, 5, 0));
+                await Task.Delay(new TimeSpan(0, 0, 10));
             }
         }
         private async Task UpdateItemData()
@@ -97,7 +68,9 @@ namespace WatchCat
         private async Task UpdatePrices()
         {
             dynamic prices = await AppManager.HttpRequest("https://api.warframestat.us/wfinfo/prices");
+
             if (prices == null) return;
+
             foreach (dynamic item in prices)
             {
                 string itemName = item.name;
@@ -107,6 +80,7 @@ namespace WatchCat
                 _item.Average = item.custom_avg;
                 _item.Volume = item.today_vol;
             }
+            UpdateCache();
         }
         private void UpdateRelicData(string relic)
         {
@@ -120,6 +94,63 @@ namespace WatchCat
                     if (_item == null) continue;
                     _item.Relics.Add(relic + " " + relicName.Name);
                 }
+            }
+        } 
+        private void UpdateCache()
+        {
+            var data = JsonConvert.SerializeObject(_itemList);
+            File.WriteAllText($"ItemList.json", data);
+            MainWindow.Instance.Status.Visibility = Visibility.Hidden;
+            _cacheLoaded = false;
+        }
+        public void LoadCachedData()
+        {
+            if (!File.Exists("ItemList.json")) return;
+            if(_cacheLoaded) return;
+            _itemList = JsonConvert.DeserializeObject<List<Item>>(File.ReadAllText("ItemList.json"));
+            DateTime dateModified = File.GetLastWriteTime("ItemList.json");
+            MainWindow.Instance.Status.ToolTip = $"Could not connect to the servers, cached data loaded from ({dateModified}).";
+            MainWindow.Instance.Status.Visibility = Visibility.Visible;
+            DataGrid.ItemsSource = _itemList;
+            _cacheLoaded = true;
+        }
+
+        #region Events
+        private void OnConnectionFailed()
+        {
+            LoadCachedData();
+        }
+
+        private void OnSearchBar_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (_itemList == null) return;
+            var foundItems = new List<Item>();
+
+            foreach (var item in _itemList)
+            {
+                // filter prime parts by name
+                if (!string.IsNullOrEmpty(item.Name) && item.Name.ToLower().Contains(SearchBar.Text.ToLower()))
+                {
+                    foundItems.Add(item);
+                }
+                // filter prime parts by relic
+                item.Relics.ForEach(relic =>
+                {
+                    if (relic.ToLower().Contains(SearchBar.Text.ToLower()))
+                    {
+                        if (foundItems.Contains(item)) return;
+                        foundItems.Add(item);
+                    }
+                });
+            }
+
+            if (!string.IsNullOrEmpty(SearchBar.Text))
+            {
+                DataGrid.ItemsSource = foundItems;
+            }
+            else
+            {
+                DataGrid.ItemsSource = _itemList;
             }
         }
         private void OnRowDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -145,5 +176,6 @@ namespace WatchCat
         {
             Process.Start(url);
         }
+        #endregion
     }
 }
