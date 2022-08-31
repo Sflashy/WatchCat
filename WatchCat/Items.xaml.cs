@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using WatchCat.Models;
+using System.Windows.Input;
 
 namespace WatchCat
 {
@@ -26,7 +27,7 @@ namespace WatchCat
        
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
-            AppManager.OnConnectionFailed += OnConnectionFailed;
+            AppManager.OnConnectionFailed += OfflineMode;
             await UpdateItemData();
 
             if (_itemList == null) return;
@@ -44,7 +45,7 @@ namespace WatchCat
         private async Task UpdateItemData()
         {
             _filteredItems = await AppManager.HttpRequest("https://api.warframestat.us/wfinfo/filtered_items");
-            if (_filteredItems == null) return;
+            if (_filteredItems == null) { OfflineMode(); return; }
             _itemList = new List<Item>();
             foreach (dynamic item in _filteredItems.eqmt)
             {
@@ -69,7 +70,7 @@ namespace WatchCat
         {
             dynamic prices = await AppManager.HttpRequest("https://api.warframestat.us/wfinfo/prices");
 
-            if (prices == null) return;
+            if (prices == null) { OfflineMode(); return; }
 
             foreach (dynamic item in prices)
             {
@@ -116,7 +117,7 @@ namespace WatchCat
         }
 
         #region Events
-        private void OnConnectionFailed()
+        private void OfflineMode()
         {
             LoadCachedData();
         }
@@ -153,7 +154,7 @@ namespace WatchCat
                 DataGrid.ItemsSource = _itemList;
             }
         }
-        private void OnRowDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void OnRowDoubleClick(object sender, MouseButtonEventArgs e)
         {
             IInputElement element = e.MouseDevice.DirectlyOver;
             if (element != null && element is FrameworkElement)
