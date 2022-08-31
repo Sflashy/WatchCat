@@ -68,7 +68,7 @@ namespace WatchCat
         }
         private async Task UpdatePrices()
         {
-            dynamic prices = await AppManager.HttpRequest("https://api.warframestat.us/wfinfo/pricess");
+            dynamic prices = await AppManager.HttpRequest("https://api.warframestat.us/wfinfo/prices");
 
             if (prices == null) { OfflineMode(); return; }
 
