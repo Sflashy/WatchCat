@@ -39,6 +39,11 @@
         </Border>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+
+            <Button x:Name="Status" Height="30" Width="30" Padding="0" Style="{DynamicResource MaterialDesignFlatButton}" Cursor="Arrow" Visibility="Hidden">
+                <materialDesign:PackIcon Kind="Connection"/>
+            </Button>
+            
             <Button Height="30" Width="30" Padding="0" Style="{DynamicResource MaterialDesignFlatButton}" Click="MinimizeApp">
                 <materialDesign:PackIcon Kind="WindowMinimize"/>
             </Button>
