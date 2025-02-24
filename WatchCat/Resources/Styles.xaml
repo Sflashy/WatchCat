@@ -1,0 +1,17 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Color x:Key="WatchCatPrimaryBackground">#151515</Color>
+    <Color x:Key="WatchCatPrimaryBackgroundWithTransparency">#99121212</Color>
+    <Color x:Key="WatchCatSecondaryBackground">#202020</Color>
+    <Color x:Key="WatchCatSecondaryBackgroundWithTransparency">#99151515</Color>
+    <Color x:Key="WatchCatPrimaryTextColor">#bcb8bf</Color>
+    <Color x:Key="WatchCatSecondaryTextColor">#97929c</Color>
+    <Color x:Key="WatchCatPrimaryIsMouseOverBackground">#202020</Color>
+
+    <SolidColorBrush x:Key="WatchCatPrimaryColor" Color="{StaticResource WatchCatPrimaryTextColor}" />
+    <SolidColorBrush x:Key="WatchCatSecondaryColor" Color="{StaticResource WatchCatSecondaryTextColor}" />
+    <SolidColorBrush x:Key="WatchCatPrimaryBackgroundColor" Color="{StaticResource WatchCatPrimaryBackground}" />
+    <SolidColorBrush x:Key="WatchCatPrimaryBackgroundColorWithTransparency" Color="{StaticResource WatchCatPrimaryBackgroundWithTransparency}" />
+    <SolidColorBrush x:Key="WatchCatSecondaryBackgroundColor" Color="{StaticResource WatchCatSecondaryBackground}" />
+    <SolidColorBrush x:Key="WatchCatSecondaryBackgroundColorWithTransparency" Color="{StaticResource WatchCatSecondaryBackgroundWithTransparency}" />
+    <SolidColorBrush x:Key="WatchCatPrimaryIsMouseOverBackgroundColor" Color="{StaticResource WatchCatPrimaryIsMouseOverBackground}" />
+</ResourceDictionary>
