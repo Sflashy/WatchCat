@@ -1,9 +1,10 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WatchCat", "WatchCat\WatchCat.csproj", "{AF1D1E5E-B30B-4EE1-9F46-35F9AB469175}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WatchCat", "WatchCat\WatchCat.csproj", "{AF1D1E5E-B30B-4EE1-9F46-35F9AB469175}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WatchCat.Core", "WatchCat.Core\WatchCat.Core.csproj", "{BFFE5C68-8ED8-4AAB-BC73-599E8EC97A32}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +16,10 @@ Global
 		{AF1D1E5E-B30B-4EE1-9F46-35F9AB469175}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF1D1E5E-B30B-4EE1-9F46-35F9AB469175}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF1D1E5E-B30B-4EE1-9F46-35F9AB469175}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFFE5C68-8ED8-4AAB-BC73-599E8EC97A32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFFE5C68-8ED8-4AAB-BC73-599E8EC97A32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFFE5C68-8ED8-4AAB-BC73-599E8EC97A32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFFE5C68-8ED8-4AAB-BC73-599E8EC97A32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
