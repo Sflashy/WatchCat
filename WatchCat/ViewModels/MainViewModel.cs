@@ -5,6 +5,7 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -41,6 +42,20 @@ public partial class MainViewModel : ObservableObject
         FetchIAndUpdatePartPricesAsync();
     }
 
+    [RelayCommand]
+    private void OpenInBrowser(object item)
+    {
+        if(item is Part part)
+        {
+            string partName = part.Name.Replace(" ", "_").ToLower();
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "https://warframe.market/items/" + partName,
+                UseShellExecute = true
+            });
+        }
+        
+    }
     private async void FetchIAndUpdatePartPricesAsync()
     {
         IsUpdating = true;
